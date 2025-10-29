@@ -1,4 +1,4 @@
-package com.ttlabz.com.ttlabz.user.domain.model
+package com.ttlabz.pombo.domain.model
 
 data class AuthenticatedUser(
     val user: User,
