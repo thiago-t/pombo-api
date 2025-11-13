@@ -23,7 +23,7 @@ class RefreshTokenEntity(
     @Column(nullable = false)
     var expiresAt: Instant,
     @Column(nullable = false)
-    var hashToken: String,
+    var hashedToken: String,
     @CreationTimestamp
     var createdAt: Instant = Instant.now(),
 )
