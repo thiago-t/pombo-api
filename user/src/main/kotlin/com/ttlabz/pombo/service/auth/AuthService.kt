@@ -2,20 +2,23 @@ package com.ttlabz.pombo.service.auth
 
 import com.ttlabz.com.ttlabz.pombo.domain.exception.InvalidCredentialsException
 import com.ttlabz.com.ttlabz.pombo.domain.exception.UserNotFoundException
+import com.ttlabz.pombo.domain.exception.InvalidTokenException
 import com.ttlabz.pombo.domain.exception.UserAlreadyExistsException
 import com.ttlabz.pombo.domain.model.AuthenticatedUser
-import com.ttlabz.pombo.infra.database.mappers.toUser
 import com.ttlabz.pombo.domain.model.User
 import com.ttlabz.pombo.domain.model.UserId
 import com.ttlabz.pombo.infra.database.entities.RefreshTokenEntity
 import com.ttlabz.pombo.infra.database.entities.UserEntity
+import com.ttlabz.pombo.infra.database.mappers.toUser
 import com.ttlabz.pombo.infra.database.repositories.RefreshTokenRepository
 import com.ttlabz.pombo.infra.database.repositories.UserRepository
 import com.ttlabz.pombo.infra.security.PasswordEncoder
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.security.MessageDigest
 import java.time.Instant
-import java.util.Base64
+import java.util.*
 
 @Service
 class AuthService(
@@ -69,6 +72,51 @@ class AuthService(
                 refreshToken = refreshToken
             )
         } ?: throw UserNotFoundException()
+    }
+
+    @Transactional
+    fun refresh(refreshToken: String): AuthenticatedUser {
+        if (!jwtService.validateRefreshToken(refreshToken)) {
+            throw InvalidTokenException(
+                message = "Invalid refresh token"
+            )
+        }
+
+        val userId = jwtService.getUserIdFromToken(refreshToken)
+        val user = userRepository.findByIdOrNull(userId)
+            ?: throw UserNotFoundException()
+
+        val hashed = hashToken(refreshToken)
+
+        return user.id?.let { userId ->
+            refreshTokenRepository.findByUserIdAndHashedToken(
+                userId = userId,
+                hashedToken = hashed
+            ) ?: throw InvalidTokenException("Invalid refresh token")
+
+            refreshTokenRepository.deleteByUserIdAndHashedToken(
+                userId = userId,
+                hashedToken = hashed
+            )
+
+            val newAccessToken = jwtService.generateAccessToken(userId)
+            val newRefreshToken = jwtService.generateRefreshToken(userId)
+
+            storeRefreshToken(userId, newRefreshToken)
+
+            AuthenticatedUser(
+                user = user.toUser(),
+                accessToken = newAccessToken,
+                refreshToken = newRefreshToken
+            )
+        } ?: throw UserNotFoundException()
+    }
+
+    @Transactional
+    fun logout(refreshToken: String) {
+        val userId = jwtService.getUserIdFromToken(refreshToken)
+        val hashed = hashToken(refreshToken)
+        refreshTokenRepository.deleteByUserIdAndHashedToken(userId, hashed)
     }
 
     private fun storeRefreshToken(userId: UserId, token: String) {

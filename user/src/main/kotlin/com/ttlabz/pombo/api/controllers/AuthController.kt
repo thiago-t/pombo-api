@@ -1,5 +1,6 @@
 package com.ttlabz.pombo.api.controllers
 
+import com.ttlabz.com.ttlabz.pombo.api.dto.RefreshRequest
 import com.ttlabz.pombo.api.dto.AuthenticatedUserDto
 import com.ttlabz.pombo.api.dto.LoginRequest
 import com.ttlabz.pombo.api.dto.RegisterRequest
@@ -38,6 +39,22 @@ class AuthController(
             email = body.email,
             password = body.password
         ).toAuthenticatedUserDto()
+    }
+
+    @PostMapping("/refresh")
+    fun refresh(
+        @RequestBody body: RefreshRequest
+    ): AuthenticatedUserDto {
+        return authService
+            .refresh(body.refreshToken)
+            .toAuthenticatedUserDto()
+    }
+
+    @PostMapping("/logout")
+    fun logout(
+        @RequestBody body: RefreshRequest
+    ) {
+        authService.logout(body.refreshToken)
     }
 
 }
