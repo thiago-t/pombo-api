@@ -1,7 +1,7 @@
 package com.ttlabz.pombo.api.exception_handling
 
-import com.ttlabz.com.ttlabz.pombo.domain.exception.InvalidCredentialsException
-import com.ttlabz.com.ttlabz.pombo.domain.exception.UserNotFoundException
+import com.ttlabz.pombo.domain.exception.InvalidCredentialsException
+import com.ttlabz.pombo.domain.exception.UserNotFoundException
 import com.ttlabz.pombo.domain.exception.InvalidTokenException
 import com.ttlabz.pombo.domain.exception.UserAlreadyExistsException
 import org.springframework.http.HttpStatus

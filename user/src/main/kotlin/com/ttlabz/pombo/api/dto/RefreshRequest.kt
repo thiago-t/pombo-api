@@ -1,4 +1,4 @@
-package com.ttlabz.com.ttlabz.pombo.api.dto
+package com.ttlabz.pombo.api.dto
 
 data class RefreshRequest(
     val refreshToken: String

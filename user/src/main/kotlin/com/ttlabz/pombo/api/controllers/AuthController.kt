@@ -1,6 +1,6 @@
 package com.ttlabz.pombo.api.controllers
 
-import com.ttlabz.com.ttlabz.pombo.api.dto.RefreshRequest
+import com.ttlabz.pombo.api.dto.RefreshRequest
 import com.ttlabz.pombo.api.dto.AuthenticatedUserDto
 import com.ttlabz.pombo.api.dto.LoginRequest
 import com.ttlabz.pombo.api.dto.RegisterRequest
