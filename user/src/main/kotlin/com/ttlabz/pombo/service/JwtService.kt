@@ -1,4 +1,4 @@
-package com.ttlabz.com.ttlabz.pombo.service
+package com.ttlabz.pombo.service
 
 import com.ttlabz.pombo.domain.exception.InvalidTokenException
 import com.ttlabz.pombo.domain.model.UserId
