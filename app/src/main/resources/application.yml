@@ -33,3 +33,8 @@ jpa:
 
 jwt:
   secret: ${JWT_SECRET}
+
+pombo:
+  email:
+    verification:
+      expiry-hours: 24
