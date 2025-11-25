@@ -7,8 +7,8 @@ import com.ttlabz.pombo.api.dto.RegisterRequest
 import com.ttlabz.pombo.api.dto.UserDto
 import com.ttlabz.pombo.api.mappers.toAuthenticatedUserDto
 import com.ttlabz.pombo.api.mappers.toUserDto
-import com.ttlabz.pombo.service.auth.AuthService
-import com.ttlabz.pombo.service.auth.EmailVerificationService
+import com.ttlabz.com.ttlabz.pombo.service.AuthService
+import com.ttlabz.com.ttlabz.pombo.service.EmailVerificationService
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
