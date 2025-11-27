@@ -2,6 +2,15 @@ spring:
   application:
     name: Pombo
 
+  data:
+      redis:
+        host: "redis-17190.c345.samerica-east1-1.gce.cloud.redislabs.com"
+        password: ${REDIS_PASSWORD}
+        username: "default"
+        port: 17190
+        connect-timeout: 5000ms
+        timeout: 2000ms
+
   datasource:
     url: jdbc:postgresql://db.thaiidrqkdmjsdnfrnsd.supabase.co:5432/postgres
     username: postgres
