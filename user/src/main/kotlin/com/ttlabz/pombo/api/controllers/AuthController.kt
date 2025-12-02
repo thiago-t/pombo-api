@@ -3,6 +3,7 @@ package com.ttlabz.pombo.api.controllers
 import com.ttlabz.pombo.api.dto.*
 import com.ttlabz.pombo.api.mappers.toAuthenticatedUserDto
 import com.ttlabz.pombo.api.mappers.toUserDto
+import com.ttlabz.pombo.infra.rate_limiting.EmailRateLimiter
 import com.ttlabz.pombo.service.AuthService
 import com.ttlabz.pombo.service.EmailVerificationService
 import com.ttlabz.pombo.service.PasswordResetService
@@ -20,6 +21,7 @@ class AuthController(
     private val authService: AuthService,
     private val emailVerificationService: EmailVerificationService,
     private val passwordResetService: PasswordResetService,
+    private val emailRateLimiter: EmailRateLimiter,
 ) {
 
     @PostMapping("/register")
@@ -57,6 +59,17 @@ class AuthController(
         @RequestBody body: RefreshRequest
     ) {
         authService.logout(body.refreshToken)
+    }
+
+    @PostMapping("/resend-verification")
+    fun resendVerification(
+        @Valid @RequestBody body: EmailRequest
+    ) {
+        emailRateLimiter.withRateLimit(
+            email = body.email
+        ) {
+            emailVerificationService.resendVerificationEmail(body.email)
+        }
     }
 
     @GetMapping("/verify")
