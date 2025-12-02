@@ -34,7 +34,7 @@ class EmailRateLimiter(
     ) {
         val normalizedEmail = email.lowercase().trim()
         val rateLimitKey = "$EMAIL_RATE_LIMIT_PREFIX:$normalizedEmail"
-        val attemptCountKey = "$EMAIL_ATTEMPT_COUNT_PREFIX$normalizedEmail"
+        val attemptCountKey = "$EMAIL_ATTEMPT_COUNT_PREFIX:$normalizedEmail"
 
         val result = redisTemplate.execute(
             rateLimitScript,
