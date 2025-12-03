@@ -1,5 +1,6 @@
 package com.ttlabz.pombo.api.exception_handling
 
+import com.ttlabz.pombo.domain.exception.UnauthorizedException
 import com.ttlabz.pombo.domain.exception.*
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -88,5 +89,14 @@ class AuthExceptionHandler {
                 )
             )
     }
+
+    @ExceptionHandler(UnauthorizedException::class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    fun onUnauthorized(
+        e: UnauthorizedException
+    ) = mapOf(
+        "code" to "UNAUTHORIZED",
+        "message" to e.message
+    )
 
 }

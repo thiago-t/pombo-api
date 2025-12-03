@@ -4,17 +4,13 @@ import com.ttlabz.pombo.api.config.IpRateLimit
 import com.ttlabz.pombo.api.dto.*
 import com.ttlabz.pombo.api.mappers.toAuthenticatedUserDto
 import com.ttlabz.pombo.api.mappers.toUserDto
+import com.ttlabz.pombo.api.util.requestUserId
 import com.ttlabz.pombo.infra.rate_limiting.EmailRateLimiter
 import com.ttlabz.pombo.service.AuthService
 import com.ttlabz.pombo.service.EmailVerificationService
 import com.ttlabz.pombo.service.PasswordResetService
 import jakarta.validation.Valid
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import java.util.concurrent.TimeUnit
 
 @RestController
@@ -137,7 +133,11 @@ class AuthController(
     fun changePassword(
         @Valid @RequestBody body: ChangePasswordRequest
     ) {
-        // TODO: Extract request user ID and call service
+        passwordResetService.changePassword(
+            userId = requestUserId,
+            oldPassword = body.oldPassword,
+            newPassword = body.newPassword
+        )
     }
 
 }
