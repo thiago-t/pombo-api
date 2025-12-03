@@ -8,3 +8,8 @@ jwt:
 
 nginx:
   require-proxy: false
+
+pombo:
+  rate-limit:
+    ip:
+      apply-limit: true
