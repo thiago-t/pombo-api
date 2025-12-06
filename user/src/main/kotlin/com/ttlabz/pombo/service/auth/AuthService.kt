@@ -1,9 +1,9 @@
 package com.ttlabz.pombo.service.auth
 
 import com.ttlabz.pombo.domain.exception.InvalidCredentialsException
-import com.ttlabz.pombo.domain.exception.UserNotFoundException
 import com.ttlabz.pombo.domain.exception.InvalidTokenException
 import com.ttlabz.pombo.domain.exception.UserAlreadyExistsException
+import com.ttlabz.pombo.domain.exception.UserNotFoundException
 import com.ttlabz.pombo.domain.model.AuthenticatedUser
 import com.ttlabz.pombo.domain.model.User
 import com.ttlabz.pombo.domain.model.UserId
