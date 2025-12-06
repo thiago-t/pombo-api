@@ -1,23 +1,20 @@
 package com.ttlabz.pombo.api.controllers
 
-import com.ttlabz.pombo.api.dto.RefreshRequest
-import com.ttlabz.pombo.api.dto.AuthenticatedUserDto
-import com.ttlabz.pombo.api.dto.LoginRequest
-import com.ttlabz.pombo.api.dto.RegisterRequest
-import com.ttlabz.pombo.api.dto.UserDto
+import com.ttlabz.pombo.api.dto.*
 import com.ttlabz.pombo.api.mappers.toAuthenticatedUserDto
 import com.ttlabz.pombo.api.mappers.toUserDto
-import com.ttlabz.pombo.service.auth.AuthService
+import com.ttlabz.pombo.service.AuthService
+import com.ttlabz.pombo.service.EmailVerificationService
+import com.ttlabz.pombo.service.PasswordResetService
 import jakarta.validation.Valid
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/v1/auth")
 class AuthController(
-    private val authService: AuthService
+    private val authService: AuthService,
+    private val emailVerificationService: EmailVerificationService,
+    private val passwordResetService: PasswordResetService,
 ) {
 
     @PostMapping("/register")
@@ -55,6 +52,37 @@ class AuthController(
         @RequestBody body: RefreshRequest
     ) {
         authService.logout(body.refreshToken)
+    }
+
+    @GetMapping("/verify")
+    fun verifyEmail(
+        @RequestParam token: String
+    ) {
+        emailVerificationService.verifyEmail(token)
+    }
+
+    @PostMapping("/forgot-password")
+    fun forgotPassword(
+        @Valid @RequestBody body: EmailRequest
+    ) {
+        passwordResetService.requestPasswordReset(body.email)
+    }
+
+    @PostMapping("/reset-password")
+    fun resetPassword(
+        @Valid @RequestBody body: ResetPasswordRequest
+    ) {
+        passwordResetService.resetPassword(
+            token = body.token,
+            newPassword = body.newPassword
+        )
+    }
+
+    @PostMapping("/change-password")
+    fun changePassword(
+        @Valid @RequestBody body: ChangePasswordRequest
+    ) {
+        // TODO: Extract request user ID and call service
     }
 
 }
