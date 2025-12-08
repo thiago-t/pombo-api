@@ -1,7 +1,7 @@
 package com.ttlabz.pombo.service
 
 import com.ttlabz.pombo.domain.exception.InvalidTokenException
-import com.ttlabz.pombo.domain.model.UserId
+import com.ttlabz.pombo.domain.type.UserId
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys

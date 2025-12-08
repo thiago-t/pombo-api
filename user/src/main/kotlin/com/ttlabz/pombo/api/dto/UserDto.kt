@@ -1,6 +1,6 @@
 package com.ttlabz.pombo.api.dto
 
-import com.ttlabz.pombo.domain.model.UserId
+import com.ttlabz.pombo.domain.type.UserId
 
 data class UserDto(
     val id: UserId,

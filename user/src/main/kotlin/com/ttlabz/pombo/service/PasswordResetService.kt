@@ -4,7 +4,7 @@ import com.ttlabz.pombo.domain.exception.InvalidCredentialsException
 import com.ttlabz.pombo.domain.exception.InvalidTokenException
 import com.ttlabz.pombo.domain.exception.SamePasswordException
 import com.ttlabz.pombo.domain.exception.UserNotFoundException
-import com.ttlabz.pombo.domain.model.UserId
+import com.ttlabz.pombo.domain.type.UserId
 import com.ttlabz.pombo.infra.database.entities.PasswordResetTokenEntity
 import com.ttlabz.pombo.infra.database.repositories.PasswordResetTokenRepository
 import com.ttlabz.pombo.infra.database.repositories.RefreshTokenRepository

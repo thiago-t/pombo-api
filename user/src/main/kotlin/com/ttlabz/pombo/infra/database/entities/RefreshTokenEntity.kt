@@ -1,6 +1,6 @@
 package com.ttlabz.pombo.infra.database.entities
 
-import com.ttlabz.pombo.domain.model.UserId
+import com.ttlabz.pombo.domain.type.UserId
 import jakarta.persistence.*
 import org.hibernate.annotations.CreationTimestamp
 import java.time.Instant

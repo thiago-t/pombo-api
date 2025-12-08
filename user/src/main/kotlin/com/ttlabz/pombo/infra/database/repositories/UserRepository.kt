@@ -1,6 +1,6 @@
 package com.ttlabz.pombo.infra.database.repositories
 
-import com.ttlabz.pombo.domain.model.UserId
+import com.ttlabz.pombo.domain.type.UserId
 import com.ttlabz.pombo.infra.database.entities.UserEntity
 import org.springframework.data.jpa.repository.JpaRepository
 

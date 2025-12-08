@@ -3,7 +3,7 @@ package com.ttlabz.pombo.service
 import com.ttlabz.pombo.domain.exception.*
 import com.ttlabz.pombo.domain.model.AuthenticatedUser
 import com.ttlabz.pombo.domain.model.User
-import com.ttlabz.pombo.domain.model.UserId
+import com.ttlabz.pombo.domain.type.UserId
 import com.ttlabz.pombo.infra.database.entities.RefreshTokenEntity
 import com.ttlabz.pombo.infra.database.entities.UserEntity
 import com.ttlabz.pombo.infra.database.mappers.toUser

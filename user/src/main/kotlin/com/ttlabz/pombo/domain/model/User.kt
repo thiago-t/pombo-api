@@ -1,8 +1,6 @@
 package com.ttlabz.pombo.domain.model
 
-import java.util.UUID
-
-typealias UserId = UUID
+import com.ttlabz.pombo.domain.type.UserId
 
 data class User(
     val id: UserId,

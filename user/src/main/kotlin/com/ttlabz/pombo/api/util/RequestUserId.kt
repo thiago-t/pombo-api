@@ -1,7 +1,7 @@
 package com.ttlabz.pombo.api.util
 
 import com.ttlabz.pombo.domain.exception.UnauthorizedException
-import com.ttlabz.pombo.domain.model.UserId
+import com.ttlabz.pombo.domain.type.UserId
 import org.springframework.security.core.context.SecurityContextHolder
 
 val requestUserId: UserId
