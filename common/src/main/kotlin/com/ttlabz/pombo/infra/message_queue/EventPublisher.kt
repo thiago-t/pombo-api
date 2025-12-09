@@ -3,7 +3,9 @@ package com.ttlabz.pombo.infra.message_queue
 import com.ttlabz.pombo.domain.events.ChirpEvent
 import org.slf4j.LoggerFactory
 import org.springframework.amqp.rabbit.core.RabbitTemplate
+import org.springframework.stereotype.Component
 
+@Component
 class EventPublisher(
     private val rabbitTemplate: RabbitTemplate
 ) {
