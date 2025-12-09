@@ -1,5 +1,6 @@
 package com.ttlabz.pombo.service
 
+import com.ttlabz.pombo.domain.events.user.UserEvent
 import com.ttlabz.pombo.domain.exception.*
 import com.ttlabz.pombo.domain.model.AuthenticatedUser
 import com.ttlabz.pombo.domain.model.User
@@ -9,6 +10,7 @@ import com.ttlabz.pombo.infra.database.entities.UserEntity
 import com.ttlabz.pombo.infra.database.mappers.toUser
 import com.ttlabz.pombo.infra.database.repositories.RefreshTokenRepository
 import com.ttlabz.pombo.infra.database.repositories.UserRepository
+import com.ttlabz.pombo.infra.message_queue.EventPublisher
 import com.ttlabz.pombo.infra.security.PasswordEncoder
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
@@ -24,6 +26,7 @@ class AuthService(
     private val jwtService: JwtService,
     private val refreshTokenRepository: RefreshTokenRepository,
     private val emailVerificationService: EmailVerificationService,
+    private val eventPublisher: EventPublisher,
 ) {
 
     @Transactional
@@ -47,6 +50,15 @@ class AuthService(
         ).toUser()
 
         val token = emailVerificationService.createVerificationToken(trimmedEmail)
+
+        eventPublisher.publish(
+            event = UserEvent.Created(
+                userId = savedUser.id,
+                email = savedUser.email,
+                username = savedUser.username,
+                verificationToken = token.token
+            )
+        )
 
         return savedUser
     }
