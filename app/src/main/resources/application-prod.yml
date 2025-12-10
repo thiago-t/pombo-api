@@ -12,3 +12,10 @@ jwt:
 
 nginx:
   require-proxy: true
+
+pombo:
+  email:
+    url: "https://localhost:8080"
+  rate-limit:
+    ip:
+      apply-limit: true

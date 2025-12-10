@@ -1,5 +1,6 @@
 package com.ttlabz.pombo.service
 
+import com.ttlabz.pombo.domain.events.user.UserEvent
 import com.ttlabz.pombo.domain.exception.InvalidCredentialsException
 import com.ttlabz.pombo.domain.exception.InvalidTokenException
 import com.ttlabz.pombo.domain.exception.SamePasswordException
@@ -9,6 +10,7 @@ import com.ttlabz.pombo.infra.database.entities.PasswordResetTokenEntity
 import com.ttlabz.pombo.infra.database.repositories.PasswordResetTokenRepository
 import com.ttlabz.pombo.infra.database.repositories.RefreshTokenRepository
 import com.ttlabz.pombo.infra.database.repositories.UserRepository
+import com.ttlabz.pombo.infra.message_queue.EventPublisher
 import com.ttlabz.pombo.infra.security.PasswordEncoder
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.repository.findByIdOrNull
@@ -25,6 +27,7 @@ class PasswordResetService(
     private val passwordEncoder: PasswordEncoder,
     @param:Value("\${pombo.email.reset-password.expiry-minutes}") private val expiryMinutes: Long,
     private val refreshTokenRepository: RefreshTokenRepository,
+    private val eventPublisher: EventPublisher,
 ) {
 
     @Transactional
@@ -39,6 +42,16 @@ class PasswordResetService(
         )
 
         passwordResetTokenRepository.save(token)
+
+        eventPublisher.publish(
+            event = UserEvent.RequestResetPassword(
+                userId = user.id!!,
+                email = user.email,
+                username = user.username,
+                passwordResetToken = token.token,
+                expiresInMinutes = expiryMinutes,
+            )
+        )
     }
 
     @Transactional

@@ -3,7 +3,7 @@ package com.ttlabz.pombo.domain.events.user
 import com.ttlabz.pombo.domain.events.ChirpEvent
 import com.ttlabz.pombo.domain.type.UserId
 import java.time.Instant
-import java.util.UUID
+import java.util.*
 
 sealed class UserEvent(
     override val eventId: String = UUID.randomUUID().toString(),
@@ -38,9 +38,8 @@ sealed class UserEvent(
         val userId: UserId,
         val email: String,
         val username: String,
-        val verificationToken: String,
+        val passwordResetToken: String,
         val expiresInMinutes: Long,
         override val eventKey: String = UserEventConstants.USER_REQUEST_RESET_PASSWORD
     ) : UserEvent(), ChirpEvent
-
 }

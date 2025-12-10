@@ -47,12 +47,14 @@ class RabbitMqConfig {
     @Bean
     fun rabbitListenerContainerFactory(
         connectionFactory: ConnectionFactory,
-        transactionalManager: PlatformTransactionManager
+        transactionalManager: PlatformTransactionManager,
+        messageConverter: JacksonJsonMessageConverter,
     ): SimpleRabbitListenerContainerFactory {
         return SimpleRabbitListenerContainerFactory().apply {
             this.setConnectionFactory(connectionFactory)
             this.setTransactionManager(transactionalManager)
             this.setChannelTransacted(true)
+            this.setMessageConverter(messageConverter)
         }
     }
 
