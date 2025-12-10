@@ -9,7 +9,6 @@ import java.time.Instant
 @Table(
     name = "chats",
     schema = "chat_service",
-    indexes = []
 )
 class ChatEntity(
     @Id

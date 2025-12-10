@@ -23,7 +23,7 @@ class ChatMessageEntity(
     var id: ChatMessageId? = null,
     @Column(nullable = false)
     var content: String,
-    @JoinColumn(
+    @Column(
         name = "chat_id",
         nullable = false,
         updatable = false
