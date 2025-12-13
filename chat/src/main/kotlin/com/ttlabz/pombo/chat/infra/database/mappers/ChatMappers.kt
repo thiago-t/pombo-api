@@ -4,6 +4,7 @@ import com.ttlabz.pombo.chat.domain.models.Chat
 import com.ttlabz.pombo.chat.domain.models.ChatMessage
 import com.ttlabz.pombo.chat.domain.models.ChatParticipant
 import com.ttlabz.pombo.chat.infra.database.entities.ChatEntity
+import com.ttlabz.pombo.chat.infra.database.entities.ChatMessageEntity
 import com.ttlabz.pombo.chat.infra.database.entities.ChatParticipantEntity
 
 fun ChatEntity.toChat(lastMessage: ChatMessage? = null): Chat {
@@ -34,5 +35,15 @@ fun ChatParticipant.toChatParticipantEntity(): ChatParticipantEntity {
         username = username,
         email = email,
         profilePictureUrl = profilePictureUrl
+    )
+}
+
+fun ChatMessageEntity.toChatMessage(): ChatMessage {
+    return ChatMessage(
+        id = id!!,
+        chatId = chatId,
+        sender = sender.toChatParticipant(),
+        content = content,
+        createdAt = createdAt
     )
 }
