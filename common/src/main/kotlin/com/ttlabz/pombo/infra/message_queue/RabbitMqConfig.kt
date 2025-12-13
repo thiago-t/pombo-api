@@ -1,5 +1,6 @@
 package com.ttlabz.pombo.infra.message_queue
 
+import com.ttlabz.pombo.domain.events.chat.ChatEventConstants
 import com.ttlabz.pombo.domain.events.ChirpEvent
 import com.ttlabz.pombo.domain.events.user.UserEventConstants
 import org.springframework.amqp.core.Binding
@@ -76,6 +77,19 @@ class RabbitMqConfig {
     )
 
     @Bean
+    fun chatExchange() = TopicExchange(
+        ChatEventConstants.CHAT_EXCHANGE,
+        true,
+        false
+    )
+
+    @Bean
+    fun chatUserEventsQueue() = Queue(
+        MessageQueues.CHAT_USER_EVENTS_QUEUE,
+        true
+    )
+
+    @Bean
     fun notificationUserEventsQueue() = Queue(
         MessageQueues.NOTIFICATION_USER_EVENTS,
         true
@@ -88,6 +102,17 @@ class RabbitMqConfig {
     ): Binding {
         return BindingBuilder
             .bind(notificationUserEventsQueue)
+            .to(userExchange)
+            .with("user.*")
+    }
+
+    @Bean
+    fun chatUserEventsBinding(
+        chatUserEventsQueue: Queue,
+        userExchange: TopicExchange
+    ): Binding {
+        return BindingBuilder
+            .bind(chatUserEventsQueue)
             .to(userExchange)
             .with("user.*")
     }
