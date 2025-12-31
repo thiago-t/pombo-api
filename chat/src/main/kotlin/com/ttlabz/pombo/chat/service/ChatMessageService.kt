@@ -1,7 +1,6 @@
 package com.ttlabz.pombo.chat.service
 
-import com.ttlabz.pombo.chat.api.dto.ChatMessageDto
-import com.ttlabz.pombo.chat.api.mappers.toChatMessageDto
+import com.ttlabz.pombo.chat.domain.event.MessageDeletedEvent
 import com.ttlabz.pombo.chat.domain.exception.ChatNotFoundException
 import com.ttlabz.pombo.chat.domain.exception.ChatParticipantNotFoundException
 import com.ttlabz.pombo.chat.domain.exception.MessageNotFoundException
@@ -11,21 +10,24 @@ import com.ttlabz.pombo.chat.infra.database.mappers.toChatMessage
 import com.ttlabz.pombo.chat.infra.database.repositories.ChatMessageRepository
 import com.ttlabz.pombo.chat.infra.database.repositories.ChatParticipantRepository
 import com.ttlabz.pombo.chat.infra.database.repositories.ChatRepository
+import com.ttlabz.pombo.domain.events.chat.ChatEvent
 import com.ttlabz.pombo.domain.exception.ForbiddenException
 import com.ttlabz.pombo.domain.type.ChatId
 import com.ttlabz.pombo.domain.type.ChatMessageId
 import com.ttlabz.pombo.domain.type.UserId
-import org.springframework.data.domain.PageRequest
+import com.ttlabz.pombo.infra.message_queue.EventPublisher
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.time.Instant
 
 @Service
 class ChatMessageService(
     private val chatRepository: ChatRepository,
     private val chatMessageRepository: ChatMessageRepository,
     private val chatParticipantRepository: ChatParticipantRepository,
+    private val applicationEventPublisher: ApplicationEventPublisher,
+    private val eventPublisher: EventPublisher,
 ) {
 
     @Transactional
@@ -39,13 +41,23 @@ class ChatMessageService(
             ?: throw ChatNotFoundException()
         val sender = chatParticipantRepository.findByIdOrNull(senderId)
             ?: throw ChatParticipantNotFoundException(senderId)
-        val savedMessage = chatMessageRepository.save(
+        val savedMessage = chatMessageRepository.saveAndFlush(
             ChatMessageEntity(
                 id = messageId,
                 content = content.trim(),
                 chatId = chatId,
                 chat = chat,
                 sender = sender
+            )
+        )
+
+        eventPublisher.publish(
+            event = ChatEvent.NewMessage(
+                senderId = sender.userId,
+                senderUsername = sender.username,
+                recipientIds = chat.participants.map { it.userId }.toSet(),
+                chatId = chatId,
+                message = savedMessage.content,
             )
         )
 
@@ -65,6 +77,13 @@ class ChatMessageService(
         }
 
         chatMessageRepository.delete(message)
+
+        applicationEventPublisher.publishEvent(
+            MessageDeletedEvent(
+                chatId = message.chatId,
+                messageId = messageId,
+            )
+        )
     }
 
 }

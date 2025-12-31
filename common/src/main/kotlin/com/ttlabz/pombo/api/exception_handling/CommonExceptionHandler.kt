@@ -1,4 +1,4 @@
-package com.ttlabz.com.ttlabz.pombo.api.exception_handling
+package com.ttlabz.pombo.api.exception_handling
 
 import com.ttlabz.pombo.domain.exception.ForbiddenException
 import com.ttlabz.pombo.domain.exception.UnauthorizedException
