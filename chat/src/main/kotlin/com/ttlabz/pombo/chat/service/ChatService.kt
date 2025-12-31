@@ -4,7 +4,6 @@ import com.ttlabz.pombo.chat.api.dto.ChatMessageDto
 import com.ttlabz.pombo.chat.api.mappers.toChatMessageDto
 import com.ttlabz.pombo.chat.domain.event.ChatParticipantLeftEvent
 import com.ttlabz.pombo.chat.domain.event.ChatParticipantsJoinedEvent
-import com.ttlabz.pombo.domain.exception.ForbiddenException
 import com.ttlabz.pombo.chat.domain.exception.ChatNotFoundException
 import com.ttlabz.pombo.chat.domain.exception.ChatParticipantNotFoundException
 import com.ttlabz.pombo.chat.domain.exception.InvalidChatSizeException
@@ -16,6 +15,7 @@ import com.ttlabz.pombo.chat.infra.database.mappers.toChatMessage
 import com.ttlabz.pombo.chat.infra.database.repositories.ChatMessageRepository
 import com.ttlabz.pombo.chat.infra.database.repositories.ChatParticipantRepository
 import com.ttlabz.pombo.chat.infra.database.repositories.ChatRepository
+import com.ttlabz.pombo.domain.exception.ForbiddenException
 import com.ttlabz.pombo.domain.type.ChatId
 import com.ttlabz.pombo.domain.type.UserId
 import org.springframework.cache.annotation.Cacheable
@@ -56,6 +56,30 @@ class ChatService(
             .map { it.toChatMessage().toChatMessageDto() }
     }
 
+    fun getChatById(
+        chatId: ChatId,
+        requestUserId: UserId,
+    ): Chat? {
+        return chatRepository
+            .findChatById(chatId, requestUserId)
+            ?.toChat(lastMessage = lastMessageForChat(chatId))
+    }
+
+    fun findChatsByUser(userId: UserId): List<Chat> {
+        val chatEntities = chatRepository.findAllByUserId(userId)
+        val chatIds = chatEntities.mapNotNull { it.id }
+        val latestMessages = chatMessageRepository
+            .findLatestMessagesByChatsIds(chatIds.toSet())
+            .associateBy { it.chatId }
+
+        return chatEntities
+            .map {
+                it.toChat(
+                    lastMessage = latestMessages[it.id]?.toChatMessage()
+                )
+            }
+            .sortedByDescending { it.lastActivityAt }
+    }
 
     @Transactional
     fun createChat(
