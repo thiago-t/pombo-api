@@ -1,4 +1,4 @@
-package com.ttlabz.pombo.security
+package com.ttlabz.pombo.api.security
 
 import com.ttlabz.pombo.api.config.JwtAuthFilter
 import jakarta.servlet.DispatcherType

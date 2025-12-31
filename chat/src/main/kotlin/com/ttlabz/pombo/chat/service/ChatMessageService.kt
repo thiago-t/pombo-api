@@ -16,6 +16,7 @@ import com.ttlabz.pombo.domain.type.ChatId
 import com.ttlabz.pombo.domain.type.ChatMessageId
 import com.ttlabz.pombo.domain.type.UserId
 import com.ttlabz.pombo.infra.message_queue.EventPublisher
+import org.springframework.cache.annotation.CacheEvict
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
@@ -31,6 +32,10 @@ class ChatMessageService(
 ) {
 
     @Transactional
+    @CacheEvict(
+        value = ["messages"],
+        key = "#chatId",
+    )
     fun sendMessage(
         chatId: ChatId,
         senderId: UserId,
@@ -84,6 +89,16 @@ class ChatMessageService(
                 messageId = messageId,
             )
         )
+
+        evictMessagesCache(message.chatId)
+    }
+
+    @CacheEvict(
+        value = ["messages"],
+        key = "#chatId"
+    )
+    fun evictMessagesCache(chatId: ChatId) {
+        // NO-OP: Let Spring handle the cache evict
     }
 
 }
