@@ -1,5 +1,6 @@
 package com.ttlabz.pombo.api.exception_handling
 
+import com.ttlabz.pombo.domain.exception.InvalidTokenException
 import com.ttlabz.pombo.domain.exception.UnauthorizedException
 import com.ttlabz.pombo.domain.exception.*
 import org.springframework.http.HttpStatus

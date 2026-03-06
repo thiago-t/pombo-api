@@ -1,5 +1,6 @@
 package com.ttlabz.pombo.service
 
+import com.ttlabz.pombo.domain.exception.InvalidTokenException
 import com.ttlabz.pombo.domain.events.user.UserEvent
 import com.ttlabz.pombo.domain.exception.*
 import com.ttlabz.pombo.domain.model.AuthenticatedUser
