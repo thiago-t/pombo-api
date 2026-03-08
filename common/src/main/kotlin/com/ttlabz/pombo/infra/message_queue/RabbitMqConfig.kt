@@ -1,7 +1,7 @@
 package com.ttlabz.pombo.infra.message_queue
 
-import com.ttlabz.pombo.domain.events.chat.ChatEventConstants
 import com.ttlabz.pombo.domain.events.ChirpEvent
+import com.ttlabz.pombo.domain.events.chat.ChatEventConstants
 import com.ttlabz.pombo.domain.events.user.UserEventConstants
 import org.springframework.amqp.core.Binding
 import org.springframework.amqp.core.BindingBuilder
@@ -94,6 +94,23 @@ class RabbitMqConfig {
         MessageQueues.NOTIFICATION_USER_EVENTS,
         true
     )
+
+    @Bean
+    fun notificationChatsEventsQueue() = Queue(
+        MessageQueues.NOTIFICATION_CHAT_EVENTS,
+        true
+    )
+
+    @Bean
+    fun notificationChatEventsBinding(
+        notificationChatEventsQueue: Queue,
+        chatExchange: TopicExchange,
+    ): Binding {
+        return BindingBuilder
+            .bind(notificationChatEventsQueue)
+            .to(chatExchange)
+            .with(ChatEventConstants.CHAT_NEW_MESSAGE)
+    }
 
     @Bean
     fun notificationUserEventsBinding(
