@@ -94,3 +94,6 @@ nginx:
 supabase:
   url: "https://thaiidrqkdmjsdnfrnsd.supabase.co"
   service-key: ${SUPABASE_SERVICE_KEY}
+
+firebase:
+  credentials-path: "classpath:firebase-credentials/pombo-firebase-adminsdk.json"
