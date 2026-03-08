@@ -1,6 +1,6 @@
-package com.ttlabz.com.ttlabz.pombo.infra.mappers
+package com.ttlabz.pombo.infra.mappers
 
-import com.ttlabz.com.ttlabz.pombo.infra.database.DeviceTokenEntity
+import com.ttlabz.pombo.infra.database.DeviceTokenEntity
 import com.ttlabz.pombo.domain.model.DeviceToken
 
 fun DeviceTokenEntity.toDeviceToken(): DeviceToken {

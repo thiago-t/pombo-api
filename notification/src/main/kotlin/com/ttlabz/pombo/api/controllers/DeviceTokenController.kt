@@ -1,10 +1,10 @@
-package com.ttlabz.com.ttlabz.pombo.api.controllers
+package com.ttlabz.pombo.api.controllers
 
-import com.ttlabz.com.ttlabz.pombo.api.dto.DeviceTokenDto
-import com.ttlabz.com.ttlabz.pombo.api.dto.RegisterDeviceRequest
-import com.ttlabz.com.ttlabz.pombo.api.mappers.toDeviceTokenDto
-import com.ttlabz.com.ttlabz.pombo.api.mappers.toPlatform
-import com.ttlabz.com.ttlabz.pombo.service.PushNotificationService
+import com.ttlabz.pombo.api.dto.DeviceTokenDto
+import com.ttlabz.pombo.api.dto.RegisterDeviceRequest
+import com.ttlabz.pombo.api.mappers.toDeviceTokenDto
+import com.ttlabz.pombo.api.mappers.toPlatform
+import com.ttlabz.pombo.service.PushNotificationService
 import com.ttlabz.pombo.api.util.requestUserId
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.*

@@ -1,7 +1,7 @@
-package com.ttlabz.com.ttlabz.pombo.api.mappers
+package com.ttlabz.pombo.api.mappers
 
-import com.ttlabz.com.ttlabz.pombo.api.dto.DeviceTokenDto
-import com.ttlabz.com.ttlabz.pombo.api.dto.PlatformDto
+import com.ttlabz.pombo.api.dto.DeviceTokenDto
+import com.ttlabz.pombo.api.dto.PlatformDto
 import com.ttlabz.pombo.domain.model.DeviceToken
 
 fun DeviceToken.toDeviceTokenDto(): DeviceTokenDto {

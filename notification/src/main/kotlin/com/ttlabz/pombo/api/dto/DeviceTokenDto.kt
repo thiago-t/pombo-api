@@ -1,4 +1,4 @@
-package com.ttlabz.com.ttlabz.pombo.api.dto
+package com.ttlabz.pombo.api.dto
 
 import com.ttlabz.pombo.domain.type.UserId
 import java.time.Instant

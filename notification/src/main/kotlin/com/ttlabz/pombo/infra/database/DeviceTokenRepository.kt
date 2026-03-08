@@ -1,4 +1,4 @@
-package com.ttlabz.com.ttlabz.pombo.infra.database
+package com.ttlabz.pombo.infra.database
 
 import com.ttlabz.pombo.domain.type.UserId
 import org.springframework.data.jpa.repository.JpaRepository

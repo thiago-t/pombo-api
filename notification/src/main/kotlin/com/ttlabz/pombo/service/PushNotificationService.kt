@@ -1,10 +1,10 @@
-package com.ttlabz.com.ttlabz.pombo.service
+package com.ttlabz.pombo.service
 
-import com.ttlabz.com.ttlabz.pombo.domain.exception.InvalidDeviceTokenException
-import com.ttlabz.com.ttlabz.pombo.infra.database.DeviceTokenEntity
-import com.ttlabz.com.ttlabz.pombo.infra.database.DeviceTokenRepository
-import com.ttlabz.com.ttlabz.pombo.infra.mappers.toDeviceToken
-import com.ttlabz.com.ttlabz.pombo.infra.mappers.toPlatformEntity
+import com.ttlabz.pombo.domain.exception.InvalidDeviceTokenException
+import com.ttlabz.pombo.infra.database.DeviceTokenEntity
+import com.ttlabz.pombo.infra.database.DeviceTokenRepository
+import com.ttlabz.pombo.infra.mappers.toDeviceToken
+import com.ttlabz.pombo.infra.mappers.toPlatformEntity
 import com.ttlabz.pombo.domain.model.DeviceToken
 import com.ttlabz.pombo.domain.model.PushNotification
 import com.ttlabz.pombo.domain.type.ChatId

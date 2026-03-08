@@ -96,7 +96,7 @@ class RabbitMqConfig {
     )
 
     @Bean
-    fun notificationChatsEventsQueue() = Queue(
+    fun notificationChatEventsQueue() = Queue(
         MessageQueues.NOTIFICATION_CHAT_EVENTS,
         true
     )

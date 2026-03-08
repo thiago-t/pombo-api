@@ -1,4 +1,4 @@
-package com.ttlabz.com.ttlabz.pombo.api.dto
+package com.ttlabz.pombo.api.dto
 
 import jakarta.validation.constraints.NotBlank
 
