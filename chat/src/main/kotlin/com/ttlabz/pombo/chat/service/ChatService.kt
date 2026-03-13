@@ -2,6 +2,7 @@ package com.ttlabz.pombo.chat.service
 
 import com.ttlabz.pombo.chat.api.dto.ChatMessageDto
 import com.ttlabz.pombo.chat.api.mappers.toChatMessageDto
+import com.ttlabz.pombo.chat.domain.event.ChatCreatedEvent
 import com.ttlabz.pombo.chat.domain.event.ChatParticipantLeftEvent
 import com.ttlabz.pombo.chat.domain.event.ChatParticipantsJoinedEvent
 import com.ttlabz.pombo.chat.domain.exception.ChatNotFoundException
@@ -98,12 +99,19 @@ class ChatService(
         val creator = chatParticipantRepository.findByIdOrNull(creatorId)
             ?: throw ChatParticipantNotFoundException(creatorId)
 
-        return chatRepository.save(
+        return chatRepository.saveAndFlush(
             ChatEntity(
                 creator = creator,
                 participants = setOf(creator) + otherParticipants,
             )
-        ).toChat(lastMessage = null)
+        ).toChat(lastMessage = null).also { entity ->
+            applicationEventPublisher.publishEvent(
+                ChatCreatedEvent(
+                    chatId = entity.id,
+                    participantIds = entity.participants.map { it.userId }
+                )
+            )
+        }
     }
 
     @Transactional

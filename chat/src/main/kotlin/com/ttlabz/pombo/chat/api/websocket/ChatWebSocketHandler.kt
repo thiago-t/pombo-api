@@ -2,10 +2,7 @@ package com.ttlabz.pombo.chat.api.websocket
 
 import com.ttlabz.pombo.chat.api.dto.ws.*
 import com.ttlabz.pombo.chat.api.mappers.toChatMessageDto
-import com.ttlabz.pombo.chat.domain.event.ChatParticipantLeftEvent
-import com.ttlabz.pombo.chat.domain.event.ChatParticipantsJoinedEvent
-import com.ttlabz.pombo.chat.domain.event.MessageDeletedEvent
-import com.ttlabz.pombo.chat.domain.event.ProfilePictureUpdatedEvent
+import com.ttlabz.pombo.chat.domain.event.*
 import com.ttlabz.pombo.chat.service.ChatMessageService
 import com.ttlabz.pombo.chat.service.ChatService
 import com.ttlabz.pombo.domain.type.ChatId
@@ -175,22 +172,19 @@ class ChatWebSocketHandler(
     }
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    fun onJoinChat(event: ChatParticipantsJoinedEvent) {
-        connectionLock.write {
-            event.userIds.forEach { userId ->
-                userChatIds.compute(userId) { _, chatIds ->
-                    (chatIds ?: mutableSetOf()).apply {
-                        add(event.chatId)
-                    }
-                }
+    fun onChatCreated(event: ChatCreatedEvent) {
+        updateChatForUsers(
+            chatId = event.chatId,
+            userIds = event.participantIds
+        )
+    }
 
-                userToSessions[userId]?.forEach { sessionId ->
-                    chatToSessions.compute(event.chatId) { _, sessions ->
-                        (sessions ?: mutableSetOf()).apply { add(sessionId) }
-                    }
-                }
-            }
-        }
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    fun onJoinChat(event: ChatParticipantsJoinedEvent) {
+        updateChatForUsers(
+            chatId = event.chatId,
+            userIds = event.userIds.toList()
+        )
 
         broadcastToChat(
             chatId = event.chatId,
@@ -311,6 +305,27 @@ class ChatWebSocketHandler(
                 }
             } catch (e: Exception) {
                 logger.error("Could not send profile picture update to session $sessionId", e)
+            }
+        }
+    }
+
+    private fun updateChatForUsers(
+        chatId: ChatId,
+        userIds: List<UserId>
+    ) {
+        connectionLock.write {
+            userIds.forEach { userId ->
+                userChatIds.compute(userId) { _, chatIds ->
+                    (chatIds ?: mutableSetOf()).apply {
+                        add(chatId)
+                    }
+                }
+
+                userToSessions[userId]?.forEach { sessionId ->
+                    chatToSessions.compute(chatId) { _, sessions ->
+                        (sessions ?: mutableSetOf()).apply { add(sessionId) }
+                    }
+                }
             }
         }
     }
