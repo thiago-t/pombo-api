@@ -4,10 +4,10 @@ spring:
 
   data:
     redis:
-      host: "redis-17190.c345.samerica-east1-1.gce.cloud.redislabs.com"
+      host: "redis-15541.c336.samerica-east1-1.gce.cloud.redislabs.com"
       password: ${REDIS_PASSWORD}
       username: "default"
-      port: 17190
+      port: 15541
       connect-timeout: 5000ms
       timeout: 2000ms
 
@@ -86,10 +86,12 @@ pombo:
 
 nginx:
   trusted-ips:
-    - "127.0.0.1" # nginx on same machine
-    - "::1" # IPv6 localhost
-    - "172.17.0.0/16" # nginx container IP when using Docker
-    - "10.0.0.5/32" # nginx server IP (if separate machine)
+    - "127.0.0.1"
+    - "::1"
+    - "10.0.0.0/8"      # Internal GCP network
+    - "172.16.0.0/12"   # Private network range
+    - "192.168.0.0/16"  # Private network range
+    - "0.0.0.0/0"       # TEMPORARY TEST: Trust all
 
 supabase:
   url: "https://thaiidrqkdmjsdnfrnsd.supabase.co"
